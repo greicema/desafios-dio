@@ -1,30 +1,30 @@
-quantAlunos = gets();
+nAlunos = gets();
 
-while (quantAlunos > 0) {
-    listaAlunos = [];
+while (nAlunos > 0) {
+    alunos = [];
 
-    for (i = 1; i <= quantAlunos; i++) {
-        arrayAux = gets().split(' ');
-        listaAlunos.push({ nome: arrayAux[0], valor: parseInt(arrayAux[1]) });
+    for (i = 1; i <= nAlunos; i++) {
+        aux = gets().split(' ');
+        alunos.push({ nome: aux[0], valor: parseInt(aux[1]) });
     }
 
-    contadorValorFicha = 0;
-    valorFicha = listaAlunos[0].valor;
+    contValorFicha = 0;
+    valorFicha = alunos[0].valor;
 
-    while ((arrQuantAlunoPorGrupo = listaAlunos.length) > 1) {
+    while ((alunoGrupo = alunos.length) > 1) {
         (valorFicha % 2 == 1) ?
-        contadorValorFicha = (contadorValorFicha + valorFicha) % arrQuantAlunoPorGrupo:
-            contadorValorFicha = (contadorValorFicha - (valorFicha % arrQuantAlunoPorGrupo)) % arrQuantAlunoPorGrupo;
+        contValorFicha = (contValorFicha + valorFicha) % alunoGrupo:
+            contValorFicha = (contValorFicha - (valorFicha % alunoGrupo)) % alunoGrupo;
 
-        if (contadorValorFicha < 0) contadorValorFicha = arrQuantAlunoPorGrupo + contadorValorFicha;
-        valorFicha = listaAlunos[contadorValorFicha].valor;
-        listaAlunos.splice(contadorValorFicha, 1);
+        if (contValorFicha < 0) contValorFicha = alunoGrupo + contValorFicha;
+        valorFicha = alunos[contValorFicha].valor;
+        alunos.splice(contValorFicha, 1);
 
-        if (valorFicha % 2 == 1) contadorValorFicha--;
-        arrQuantAlunoPorGrupo--;
+        if (valorFicha % 2 == 1) contValorFicha--;
+        alunoGrupo--;
     }
 
-    console.log("Vencedor(a): " + listaAlunos[0].nome);
+    console.log("Vencedor(a): " + alunos[0].nome);
 
-    quantAlunos = gets();
+    nAlunos = gets();
 }
