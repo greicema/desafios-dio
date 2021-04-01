@@ -1,57 +1,33 @@
-let pilhasCartas = [];
-let leitura = "";
+const calc = (n) => n % 3 === 0 ? true : false;
 
-do {
-    leitura = gets();
-    if (leitura !== "0") {
-        let qtdPilha = parseInt(leitura);
-        let pilha = [];
+const verificarInstancia = (a, b, c) => {
+    let arrAux = '';
+    arrAux = arrAux.concat(a).concat(b).concat(c);
 
-        for (let i = 0; i < qtdPilha; i++) {
-            pilha.push(gets());
-        }
-        pilhasCartas.push(pilha);
-    }
-} while (leitura !== "0");
+    let x = arrAdicionarCartas.get(arrAux);
+    if (x > 0) return x === 1 ? true : false;
 
-let resultados = [];
-for (pilhas of pilhasCartas) {
-    let resultadoJogo = [];
-    for (pilha of pilhas) {
-        let cartas = pilha.split(" ").map(num => parseInt(num));
-        resultadoJogo.push(verificarRetirada(cartas));
-    }
-    resultados.push(resultadoJogo);
+    if (a === b && b === c && c === quantLinhas) return true;
+
+    if (calc(cartas[0][a]) && verificarInstancia(a + 1, b, c)) return true;
+    if (calc(cartas[1][b]) && verificarInstancia(a, b + 1, c)) return true;
+    if (calc(cartas[2][c]) && verificarInstancia(a, b, c + 1)) return true;
+    if (calc(cartas[0][a] + cartas[1][b]) && verificarInstancia(a + 1, b + 1, c)) return true;
+    if (calc(cartas[0][a] + cartas[2][c]) && verificarInstancia(a + 1, b, c + 1)) return true;
+    if (calc(cartas[1][b] + cartas[2][c]) && verificarInstancia(a, b + 1, c + 1)) return true;
+    if (calc(cartas[0][a] + cartas[1][b] + cartas[2][c]) && verificarInstancia(a + 1, b + 1, c + 1)) return true;
+
+    arrAdicionarCartas.set(arrAux, 2);
+    return false;
 }
 
-for (resultado of resultados) {
-    let jogo = true;
-    for (let i = 0; i < resultado.length; i++) {
-        jogo = jogo && resultado[i];
-    }
-    if (jogo) {
-        console.log(1);
-    } else {
-        console.log(0);
-    }
-}
+while ((quantLinhas = parseInt(gets())) !== 0) {
 
-function verificarRetirada(cartas) {
-    let tipo1 = cartas[0];
-    let tipo2 = retornarSoma(cartas, 1);
-    let tipo3 = retornarSoma(cartas, 2);
+    arrAdicionarCartas = new Map();
 
-    if (tipo1 % 3 === 0 || tipo2 % 3 === 0 || tipo3 % 3 === 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
+    cartas = Array.from(new Array(3)).map(x => new Array(quantLinhas));
 
-function retornarSoma(cartas, indiceMax) {
-    let soma = 0;
-    for (let i = 0; i <= indiceMax; i++) {
-        soma += cartas[i];
-    }
-    return soma;
+    for (let i = 0; i < quantLinhas; i++)[cartas[0][i], cartas[1][i], cartas[2][i]] = gets().split(" ");
+
+    console.log(verificarInstancia(0, 0, 0) ? 1 : 0);
 }

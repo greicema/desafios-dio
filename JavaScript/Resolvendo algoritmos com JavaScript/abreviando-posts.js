@@ -1,53 +1,23 @@
-let leituras = [];
-let dado = "";
+while ((frases = gets()) !== '.') {
+    const frase = frases.match(/\b[a-z]{1,30}\b/g);
+    const strNaoRepetidas = Array.from(frase);
 
-do {
-    dado = gets();
-    if (dado !== ".") {
-        leituras.push(dado);
-    }
-} while (dado !== ".");
+    const arrObjStrings = strNaoRepetidas.map(str => {
+        const strTamanho = (str.length - 2) * (frase.join(' ').match(new RegExp(`\\b${str}\\b`, 'g')).length);
 
-let novasLeituras = [];
+        const abreviacao = str[0].concat('.');
+        const titulo = abreviacao.concat(' = ').concat(str);
+        const regexp = new RegExp(`\\b${str}\\b`, 'g');
+        return { str, strTamanho, abreviacao, titulo, regexp }
+    });
 
-for (leitura of leituras) {
-    let arrayLeitura = leitura.split(" ");
-    let novasLinhas = [];
-    let palavra = [];
-    let palavraTrocada = [];
-    let trocas = [];
-    let contadorTroca = 0;
+    const abreviacoes = ('abcdefghijklmnopqrstuvwxyz').split('').map(letra => {
+        return arrObjStrings
+            .filter(aux => aux.str.match(new RegExp(`\\b${letra}\\w{2,}\\b`, 'g')))
+            .reduce((acc, curr) => curr.strTamanho >= acc.strTamanho ? curr : acc, { strTamanho: 0 });
+    }).filter(el => el.strTamanho > 0)
 
-    for (let i = 0; i < arrayLeitura.length; i++) {
-        let subs = arrayLeitura[i];
-        palavra.push(subs);
-        if (subs.length > 2) {
-            let novaPalavra = arrayLeitura[i].substring(0, 1).concat(".");
-            palavraTrocada.push(novaPalavra);
-            let novaLinha = arrayLeitura.map(linha => {
-                if (linha === arrayLeitura[i]) {
-                    contadorTroca++;
-                    return novaPalavra;
-                }
-                return linha;
-            });
-            novasLinhas.push(novaLinha.join(" "));
-            trocas.push(contadorTroca);
-        }
-    }
-
-    let menorPalavra = 9999999;
-    let indice = 0;
-
-    for (novaLinha in novasLinhas) {
-        if (novasLinhas[novaLinha].length < menorPalavra) {
-            menorPalavra = novasLinhas[novaLinha].length;
-            indice = parseInt(novaLinha);
-        }
-    }
-
-    console.log();
-    console.log(novasLinhas[indice]);
-    console.log(trocas[indice]);
-    console.log(palavraTrocada[indice], " = ", palavra[indice]);
+    for (const abrev of abreviacoes) frases = frases.replace(abrev.regexp, abrev.abreviacao);
+    console.log(frases + '\n' + abreviacoes.length);
+    abreviacoes.sort().map(({ titulo }) => console.log(titulo));
 }
